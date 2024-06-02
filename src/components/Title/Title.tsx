@@ -3,8 +3,8 @@ import { FC } from "react";
 import styles from "./Title.module.css";
 
 interface TitleProps {
-  title?: string;
-  color?: string;
+  title: string;
+  color: "violeta" | "beige";
 }
 export const Title: FC<TitleProps> = ({ title, color }) => {
   let bgColor =
