@@ -1,8 +1,9 @@
-import { AuthOptions, TokenSet } from "next-auth";
-import { JWT } from "next-auth/jwt";
 import NextAuth from "next-auth";
 import KeycloakProvider from "next-auth/providers/keycloak";
+import { AuthOptions, TokenSet } from "next-auth";
+import { JWT } from "next-auth/jwt";
 
+// Helper function to refresh access tokens
 async function requestRefreshOfAccessToken(token: JWT) {
   const response = await fetch(`${process.env.KEYCLOAK_ISSUER}/protocol/openid-connect/token`, {
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -24,6 +25,7 @@ async function requestRefreshOfAccessToken(token: JWT) {
   return tokens;
 }
 
+// Auth options configuration
 export const authOptions: AuthOptions = {
   providers: [
     KeycloakProvider({
@@ -78,6 +80,6 @@ export const authOptions: AuthOptions = {
   },
 };
 
+// Export handler for NextAuth, for both GET and POST methods
 const handler = NextAuth(authOptions);
-
 export { handler as GET, handler as POST };
