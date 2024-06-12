@@ -1,6 +1,6 @@
 import { AuthOptions, TokenSet } from "next-auth";
 import { JWT } from "next-auth/jwt";
-import NextAuth from "next-auth/next";
+import NextAuth from "next-auth";
 import KeycloakProvider from "next-auth/providers/keycloak";
 
 function requestRefreshOfAccessToken(token: JWT) {
