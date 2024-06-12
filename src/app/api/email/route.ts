@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server';
-const nodemailer = require('nodemailer');
+import nodemailer from 'nodemailer';
 import Mail from 'nodemailer/lib/mailer';
 
 
