@@ -1,37 +1,28 @@
-import NextAuth from "next-auth";
-import KeycloakProvider from "next-auth/providers/keycloak";
 import { AuthOptions, TokenSet } from "next-auth";
 import { JWT } from "next-auth/jwt";
+import NextAuth from "next-auth/next";
+import KeycloakProvider from "next-auth/providers/keycloak";
 
-// Helper function to refresh access tokens
-async function requestRefreshOfAccessToken(token: JWT) {
-  const response = await fetch(`${process.env.KEYCLOAK_ISSUER}/protocol/openid-connect/token`, {
+function requestRefreshOfAccessToken(token: JWT) {
+  return fetch(`${process.env.KEYCLOAK_ISSUER}/protocol/openid-connect/token`, {
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams({
-      client_id: process.env.KEYCLOAK_CLIENT_ID!,
-      client_secret: process.env.KEYCLOAK_CLIENT_SECRET!,
+      client_id: process.env.KEYCLOAK_CLIENT_ID,
+      client_secret: process.env.KEYCLOAK_CLIENT_SECRET,
       grant_type: "refresh_token",
       refresh_token: token.refreshToken!,
     }),
     method: "POST",
     cache: "no-store",
   });
-
-  if (!response.ok) {
-    throw new Error('Failed to refresh access token');
-  }
-
-  const tokens: TokenSet = await response.json();
-  return tokens;
 }
 
-// Auth options configuration
-export const authOptions: AuthOptions = {
+const authOptions: AuthOptions = {
   providers: [
     KeycloakProvider({
-      clientId: process.env.KEYCLOAK_CLIENT_ID!,
-      clientSecret: process.env.KEYCLOAK_CLIENT_SECRET!,
-      issuer: process.env.KEYCLOAK_ISSUER!,
+      clientId: process.env.KEYCLOAK_CLIENT_ID,
+      clientSecret: process.env.KEYCLOAK_CLIENT_SECRET,
+      issuer: process.env.KEYCLOAK_ISSUER,
     }),
   ],
   pages: {
@@ -52,17 +43,23 @@ export const authOptions: AuthOptions = {
         token.expiresAt = account.expires_at;
         return token;
       }
-
       if (Date.now() < token.expiresAt! * 1000 - 60 * 1000) {
         return token;
       } else {
         try {
-          const tokens = await requestRefreshOfAccessToken(token);
+          const response = await requestRefreshOfAccessToken(token);
+
+          const tokens: TokenSet = await response.json();
+
+          if (!response.ok) throw tokens;
+
           const updatedToken: JWT = {
-            ...token,
+            ...token, // Keep the previous token properties
             idToken: tokens.id_token,
             accessToken: tokens.access_token,
-            expiresAt: Math.floor(Date.now() / 1000 + (tokens.expires_in as number)),
+            expiresAt: Math.floor(
+              Date.now() / 1000 + (tokens.expires_in as number)
+            ),
             refreshToken: tokens.refresh_token ?? token.refreshToken,
           };
           return updatedToken;
@@ -80,6 +77,6 @@ export const authOptions: AuthOptions = {
   },
 };
 
-// Export handler for NextAuth, for both GET and POST methods
 const handler = NextAuth(authOptions);
+
 export { handler as GET, handler as POST };
