@@ -1,0 +1,40 @@
+.typography_title {
+    text-align: center;
+    font-weight: 600;
+    font-size: x-large;
+    line-height: 2rem;
+    width: 100%;
+    margin: 0;
+}
+
+.typography_title::before {
+    right: .5em;
+    margin-left: -50%;
+}
+
+.typography_title::after {
+    left: .5em;
+    margin-right: -50%;
+}
+
+.typography_title:after,
+.typography_title:before {
+    content: "";
+    display: inline-block;
+    height: 4px;
+    position: relative;
+    vertical-align: middle;
+    width: 25%;
+}
+
+@media screen and (max-width: 750px) {
+    .typography_title {
+        font-size: larger;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .typography_title {
+        font-size: initial;
+    }
+}
