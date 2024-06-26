@@ -64,7 +64,7 @@ export default function UpdateProductForm({ id }: Readonly<{ id: number | undefi
             "idWinery",
             wineriesResponse.find(
                 (winery: IIdName) => winery.name === productResponse.nameWinery
-            )?.id || (undefined as number | undefined)
+            )?.id 
             );
             setValue(
             "idVariety",
