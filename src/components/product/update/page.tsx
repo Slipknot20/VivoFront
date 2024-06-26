@@ -58,13 +58,13 @@ export default function UpdateProductForm({ id }: Readonly<{ id: number | undefi
             "idType",
             typesResponse.find(
                 (type: IIdName) => type.name === productResponse.nameType
-            )?.id || (undefined as number | undefined)
+            )?.id 
             );
             setValue(
             "idWinery",
             wineriesResponse.find(
                 (winery: IIdName) => winery.name === productResponse.nameWinery
-            )?.id 
+            )?.id ?? (undefined as number | undefined)
             );
             setValue(
             "idVariety",
@@ -160,7 +160,7 @@ export default function UpdateProductForm({ id }: Readonly<{ id: number | undefi
                 })}
                 className="shadow appearance-none border border-line rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 type="text"
-                onKeyDown={handleTextAndNumberInput}
+                 onKeyDown={handleTextAndNumberInput}
             />
             {errors.name && (
                 <p className="text-red-500 text-xs italic">{errors.name.message}</p>
