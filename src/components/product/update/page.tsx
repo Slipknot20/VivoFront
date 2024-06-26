@@ -160,7 +160,6 @@ export default function UpdateProductForm({ id }: Readonly<{ id: number | undefi
                 })}
                 className="shadow appearance-none border border-line rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 type="text"
-                defaultValue={product?.name}
                 onKeyDown={handleTextAndNumberInput}
             />
             {errors.name && (

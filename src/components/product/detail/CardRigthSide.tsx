@@ -39,12 +39,16 @@ export default function CardRigthSide({ wine }: Readonly<CardRigthSideProps>) {
     const handleCloseAlert = () => {
         setShowAlert(false);
     };
+    const getShortenedName = (name: string) => {
+        return name.split(' ').slice(0, 2).join(' ');
+    };
+
 
     return (
         <>
             <CardContent className="flex flex-col items-center">
                 <div className="flex justify-between mb-4 w-full">
-                    <h1 className="text-2xl font-normal border-b-2 border-t-2 border-[#5B483A] pt-2 pb-2 w-full text-center">{wine.name}</h1>
+                    <h1 className="text-2xl font-normal border-b-2 border-t-2 border-[#5B483A] pt-2 pb-2 w-full text-center">{getShortenedName(wine.name)}</h1>
                 </div>
                 <div className="grid grid-cols-[auto_1fr] gap-y-2 mb-4 w-full">
                     <div className="text-left w-full mt-4">
