@@ -3,13 +3,27 @@ import { Title } from "@/components/Title/Title";
 import BackButton from "@/components/ui/BackButton";
 import { Button } from "@/components/ui/button";
 import { IIdName } from "@/types/idName/idName.types";
-import { Product, ProductFormValues } from "@/types/products/products.types";
+import { ProductFormValues } from "@/types/products/products.types";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import DialogeMessage from "../register/DialogeMessage";
 import DinamicButton from "@/components/ui/DinamicButton";
 import BackText from "@/components/ui/BackText";
+import { error } from "console";
 
+
+export interface Product {
+    id: number | undefined;
+    name: string | undefined;
+    description: string | undefined;
+    year: string | undefined;
+    image: string | undefined;
+    price: number | undefined;
+    nameWinery: string | undefined;
+    nameVariety: string | undefined;
+    nameType: string | undefined;
+    stock?:number | undefined
+  } 
 export default function UpdateProductForm({ id }: Readonly<{ id: number | undefined }>) {
     const [product, setProduct] = useState<Product>();
     const [dialogOpen, setDialogOpen] = useState(false);
@@ -18,70 +32,100 @@ export default function UpdateProductForm({ id }: Readonly<{ id: number | undefi
     const [wineries, setWineries] = useState<IIdName[]>([]);
     const [types, setTypes] = useState<IIdName[]>([]);
     const [varieties, setVarieties] = useState<IIdName[]>([]);
+    const [defaultTypeId, setDefaultType] = useState<number | undefined >(0)
+    const [defaultVarietyId, setDefaultVarietyId] = useState<number | undefined >(0)
+    const [defaultWinaryId, setDefaultWinaryId] = useState<number | undefined >(0)
+
     const {
         register,
         handleSubmit,
         setValue,
         formState: { errors },
     } = useForm<ProductFormValues>();
- 
+
+
+    const productResponse   = () => {
+        fetch( `${process.env.NEXT_PUBLIC_GET_BASE_URL}/ms-commerce/product/id/${id}`)
+            .then((res) => res.json())
+            .then((data) => setProduct(data))
+            .catch((error) => {
+                console.error('Error fetching types:', error);
+            });
+    };
+    const wineriesResponse = () => {
+        fetch(`${process.env.NEXT_PUBLIC_GET_BASE_URL}/ms-commerce/winery/all`)
+            .then((res) => res.json())
+            .then((data) => {
+                setWineries(data)
+              
+            })
+            .catch((error) => {
+                console.error('Error fetching wineries:', error);
+            });
+    };
+    
+    const  typesResponse = () => {
+        fetch( `${process.env.NEXT_PUBLIC_GET_BASE_URL}/ms-commerce/type/all`)
+            .then((res) => res.json())
+            .then((data) => setTypes(data)
+          
+        )
+            .catch((error) => {
+                console.error('Error fetching types:', error);
+            });
+    };
+    
+
+    const varietiesResponse = () => {
+        fetch(`${process.env.NEXT_PUBLIC_GET_BASE_URL}/ms-commerce/variety/all`)
+            .then((res) => res.json())
+            .then((data) => setVarieties(data))
+            .catch((error) => {
+                console.error('Error fetching types:', error);
+            });
+    };
+    
+    
+
 
     useEffect(() => {
         const fetchData = async () => {
-        try {
-            const [
-            productResponse,
-            wineriesResponse,
-            typesResponse,
-            varietiesResponse,
-            ] = await Promise.all([
-            fetch(
-                `${process.env.NEXT_PUBLIC_GET_BASE_URL}/ms-commerce/product/id/${id}`
-            ).then((res) => res.json()),
-            fetch(
-                `${process.env.NEXT_PUBLIC_GET_BASE_URL}/ms-commerce/winery/all`
-            ).then((res) => res.json()),
-            fetch(
-                `${process.env.NEXT_PUBLIC_GET_BASE_URL}/ms-commerce/type/all`
-            ).then((res) => res.json()),
-            fetch(
-                `${process.env.NEXT_PUBLIC_GET_BASE_URL}/ms-commerce/variety/all`
-            ).then((res) => res.json()),
-            ]);
-            setProduct(productResponse);
-            setWineries(wineriesResponse);
-            setTypes(typesResponse);
-            setVarieties(varietiesResponse);
-            setValue("name", productResponse.name);
-            setValue("image", productResponse.image);
-            setValue(
-            "idType",
-            typesResponse.find(
-                (type: IIdName) => type.name === productResponse.nameType
-            )?.id 
-            );
-            setValue(
-            "idWinery",
-            wineriesResponse.find(
-                (winery: IIdName) => winery.name === productResponse.nameWinery
-            )?.id ?? (undefined as number | undefined)
-            );
-            setValue(
-            "idVariety",
-            varietiesResponse.find(
-                (variety: IIdName) => variety.name === productResponse.nameVariety
-            )?.id || (undefined as number | undefined)
-            );
-            setValue("stock", productResponse.stock);
-            setValue("price", productResponse.price);
-            setValue("year", productResponse.year);
-            setValue("description", productResponse.description);
-        } catch (error) {
-            console.error("Error fetching data:", error);
-        }
+            try {
+                productResponse();
+                varietiesResponse();
+                wineriesResponse();
+                typesResponse();
+
+              
+                
+               
+                const defaultTypeId: number | undefined = types.find(
+                    (type) => type.name === product?.nameType
+                )?.id;
+                
+                setDefaultType(defaultTypeId);
+                
+                // Solo establece el valor si defaultTypeId no es undefined
+                if (defaultTypeId !== undefined) {
+                    setValue("idType", defaultTypeId);
+                } else {
+                    // Maneja el caso en que defaultTypeId es undefined si es necesario
+                    console.warn("No type found with the specified name.");
+                }
+                
+
+                const defaultVarietyId = varieties.find(
+                    (variety) => variety.name === product?.nameVariety
+                )?.id;
+                setDefaultVarietyId(defaultVarietyId)
+            } catch (error) {
+                console.log(error);
+            }
         };
+    
         fetchData();
     }, [id]);
+    
 
     const onSubmit: SubmitHandler<ProductFormValues> = async (data) => {
         try {
@@ -160,7 +204,8 @@ export default function UpdateProductForm({ id }: Readonly<{ id: number | undefi
                 })}
                 className="shadow appearance-none border border-line rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 type="text"
-                 onKeyDown={handleTextAndNumberInput}
+                defaultValue={product?.name}
+                onKeyDown={handleTextAndNumberInput}
             />
             {errors.name && (
                 <p className="text-red-500 text-xs italic">{errors.name.message}</p>
@@ -203,9 +248,9 @@ export default function UpdateProductForm({ id }: Readonly<{ id: number | undefi
             <select
                 {...register("idType", { required: "Este campo es requerido" })}
                 className="shadow appearance-none border border-line rounded w-full py-2 px-3 text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
-               
-            >
-                <option value="">Seleciona un tipo</option>
+           
+            > 
+                <option value=""> {product?.nameType}</option>
                 {types.map((type) => (
                 <option key={type.id} value={type.id}>
                     {type.name}
@@ -233,8 +278,9 @@ export default function UpdateProductForm({ id }: Readonly<{ id: number | undefi
                 })}
          
                 className="shadow appearance-none border border-line rounded w-full py-2 px-3 text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
-            >
-                <option value="">Seleciona una bodega</option>
+                defaultValue={defaultWinaryId}
+           >
+                <option value="">{product?.nameWinery}</option>
                 {wineries.map((winery) => (
                 <option key={winery.id} value={winery.id}>
                     {winery.name}
@@ -259,9 +305,9 @@ export default function UpdateProductForm({ id }: Readonly<{ id: number | undefi
             <select
                 {...register("idVariety", { required: "Este campo es requerido" })}
                 className="shadow appearance-none border border-line rounded w-full py-2 px-3 text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
-         
+                defaultValue={defaultVarietyId}
             >
-                <option value="">Seleciona un variedad</option>
+                <option value="">{product?.nameVariety}</option>
                 {varieties.map((variety) => (
                 <option key={variety.id} value={variety.id}>
                     {variety.name}
