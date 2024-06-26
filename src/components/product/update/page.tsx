@@ -24,15 +24,7 @@ export default function UpdateProductForm({ id }: Readonly<{ id: number | undefi
         setValue,
         formState: { errors },
     } = useForm<ProductFormValues>();
-    const defaultWineryId = wineries.find(
-        (winery) => winery.name === product?.nameWinery
-    )?.id;
-    const defaultTypeId = types.find(
-        (type) => type.name === product?.nameType
-    )?.id;
-    const defaultVarietyId = varieties.find(
-        (variety) => variety.name === product?.nameVariety
-    )?.id;
+ 
 
     useEffect(() => {
         const fetchData = async () => {
@@ -212,7 +204,7 @@ export default function UpdateProductForm({ id }: Readonly<{ id: number | undefi
             <select
                 {...register("idType", { required: "Este campo es requerido" })}
                 className="shadow appearance-none border border-line rounded w-full py-2 px-3 text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
-                defaultValue={defaultTypeId ?? ""}
+               
             >
                 <option value="">Seleciona un tipo</option>
                 {types.map((type) => (
@@ -240,7 +232,7 @@ export default function UpdateProductForm({ id }: Readonly<{ id: number | undefi
                 {...register("idWinery", {
                 required: "Este campo es requerido",
                 })}
-                defaultValue={defaultWineryId}
+         
                 className="shadow appearance-none border border-line rounded w-full py-2 px-3 text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
             >
                 <option value="">Seleciona una bodega</option>
@@ -268,7 +260,7 @@ export default function UpdateProductForm({ id }: Readonly<{ id: number | undefi
             <select
                 {...register("idVariety", { required: "Este campo es requerido" })}
                 className="shadow appearance-none border border-line rounded w-full py-2 px-3 text-gray-600 leading-tight focus:outline-none focus:shadow-outline"
-                defaultValue={defaultVarietyId}
+         
             >
                 <option value="">Seleciona un variedad</option>
                 {varieties.map((variety) => (
