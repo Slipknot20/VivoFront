@@ -1,7 +1,5 @@
 "use client";
 import { Title } from "@/components/Title/Title";
-import BackButton from "@/components/ui/BackButton";
-import { Button } from "@/components/ui/button";
 import { IIdName } from "@/types/idName/idName.types";
 import { Product, ProductFormValues } from "@/types/products/products.types";
 import { useEffect, useState } from "react";
@@ -28,15 +26,25 @@ export default function UpdateProductForm({
     setValue,
     formState: { errors },
   } = useForm<ProductFormValues>();
-  const defaultWineryId = wineries.find(
-    (winery) => winery.name === product?.nameWinery
-  )?.id;
-  const defaultTypeId = types.find(
-    (type) => type.name === product?.nameType
-  )?.id;
-  const defaultVarietyId = varieties.find(
-    (variety) => variety.name === product?.nameVariety
-  )?.id;
+
+  const defaultWineryId =  wineries.map((winery: IIdName) => {
+    if (winery.name === product?.nameWinery) {
+      setValue("idWinery", winery.id);
+    }
+    return winery.id
+  });
+  const defaultTypeId =   types.map((type: IIdName) => {
+    if (type.name === product?.nameType) {
+      setValue("idType", type.id);
+    }
+    return type.id
+  });
+  const defaultVarietyId =   varieties.map((variety: IIdName) => {
+    if (variety.name === product?.nameVariety) {
+      setValue("idVariety", variety.id);
+    }
+    return variety.id
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,40 +68,29 @@ export default function UpdateProductForm({
             `${process.env.NEXT_PUBLIC_GET_BASE_URL}/ms-commerce/variety/all`
           ).then((res) => res.json()),
         ]);
+
         setProduct(productResponse);
         setWineries(wineriesResponse);
         setTypes(typesResponse);
         setVarieties(varietiesResponse);
+        console.log(varieties)
+        console.log(types)
+
         setValue("name", productResponse.name);
         setValue("image", productResponse.image);
-        setValue(
-          "idType",
-          typesResponse.find(
-            (type: IIdName) => type.name === productResponse.nameType
-          )?.id || (undefined as number | undefined)
-        );
-        setValue(
-          "idWinery",
-          wineriesResponse.find(
-            (winery: IIdName) => winery.name === productResponse.nameWinery
-          )?.id || (undefined as number | undefined)
-        );
-        setValue(
-          "idVariety",
-          varietiesResponse.find(
-            (variety: IIdName) => variety.name === productResponse.nameVariety
-          )?.id || (undefined as number | undefined)
-        );
         setValue("stock", productResponse.stock);
         setValue("price", productResponse.price);
         setValue("year", productResponse.year);
         setValue("description", productResponse.description);
+
+      
+
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
     fetchData();
-  }, [id]);
+  }, [id, setValue]);
 
   const onSubmit: SubmitHandler<ProductFormValues> = async (data) => {
     try {
@@ -219,14 +216,18 @@ export default function UpdateProductForm({
           <select
             {...register("idType", { required: "Este campo es requerido" })}
             className="shadow appearance-none border border-line rounded w-full py-2 px-3 text-gray-600 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-inset focus:ring-violetaDos"
-            defaultValue={defaultTypeId ?? ""}
+         
           >
-            <option value="">Seleciona un tipo</option>
-            {types.map((type) => (
-              <option key={type.id} value={type.id}>
-                {type.name}
-              </option>
-            ))}
+             <option value="">Selecciona un tipo</option>
+                {types.map((type) => (
+                    <option
+                    key={type.id}
+                    value={type.id}
+                    selected={type.name === product?.nameType ? true : false}
+                    >
+                    {type.name}
+            </option>
+                ))}
           </select>
 
           {errors.idType && (
@@ -244,18 +245,20 @@ export default function UpdateProductForm({
             Bodega del Vino
           </label>
           <select
-            {...register("idWinery", {
-              required: "Este campo es requerido",
-            })}
-            defaultValue={defaultWineryId}
+            {...register("idWinery", { required: "Este campo es requerido" } )}
+        
             className="shadow appearance-none border border-line rounded w-full py-2 px-3 text-gray-600 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-inset focus:ring-violetaDos"
           >
-            <option value="">Seleciona una bodega</option>
-            {wineries.map((winery) => (
-              <option key={winery.id} value={winery.id}>
-                {winery.name}
-              </option>
-            ))}
+             <option value="">Selecciona una bodega</option>
+                {wineries.map((winery) => (
+                    <option
+                    key={winery.id}
+                    value={winery.id}
+                    selected={winery.name === product?.nameWinery ? true : false}
+                    >
+                    {winery.name}
+            </option>
+                ))}
           </select>
 
           {errors.idWinery && (
@@ -273,15 +276,20 @@ export default function UpdateProductForm({
             Variedad de uva
           </label>
           <select
-            {...register("idVariety", { required: "Este campo es requerido" })}
+            {...register("idVariety", )}
             className="shadow appearance-none border border-line rounded w-full py-2 px-3 text-gray-600 leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-inset focus:ring-violetaDos"
-            defaultValue={defaultVarietyId}
+      
           >
-            <option value="">Seleciona un variedad</option>
+       
+       <option value="">Selecciona una variedad</option>
             {varieties.map((variety) => (
-              <option key={variety.id} value={variety.id}>
+                <option
+                key={variety.id}
+                value={variety.id}
+                selected={variety.name === product?.nameVariety ? true : false}
+                >
                 {variety.name}
-              </option>
+        </option>
             ))}
           </select>
           {errors.idVariety && (
@@ -301,7 +309,7 @@ export default function UpdateProductForm({
           <input
             {...register("stock", {
               required: "Este campo es requerido",
-              min: { value: 1, message: "Debe ser al menos 1" },
+              min: { value: 0, message: "Debe ser al menos 1" },
               maxLength: {
                 value: 9,
                 message: "Debe tener máximo 9 caracteres",
