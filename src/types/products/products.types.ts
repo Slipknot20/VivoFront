@@ -12,15 +12,15 @@ export interface Product {
     stock?:number
   }
 export interface ProductFormValues {
-  name: string;
-  description: string;
-  image: string;
-  year: number;
-  price: number;
-  stock: number;
-  idWinery: number;
-  idVariety: number;
-  idType: number;
+  name: string | undefined;
+  description: string | undefined;
+  image: string | undefined;
+  year: number | undefined;
+  price: number | undefined;
+  stock: number | undefined;
+  idWinery: number | undefined;
+  idVariety: number| undefined;
+  idType: number | undefined;
 }
 export interface ICardProduct {
   product: Product, 
