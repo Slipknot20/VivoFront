@@ -117,9 +117,9 @@ const ProductsPage = () => {
 
   return (
     <>
-      <div className="mt-[120px] mb-6 flex flex-col md:flex-row">
+      <div className="mt-[40px] md:mt-[120px] mb-6 flex flex-col md:flex-row">
         {/* Filtros */}
-        <div className="flex-none w-full md:flex md:w-72">
+        <div className="flex-none w-full md:flex md:w-72 ">
         <ProductFilters
           products={products}
           selectedTypes={selectedTypes}
@@ -138,7 +138,7 @@ const ProductsPage = () => {
         />
         </div>
         <div className="mt-10 flex-1 border-l border-gray-200 xl:pr-20 xl:pl-20">
-          <div className="flex mx-auto  w-2/3 md:w-full">
+          <div className="flex mx-auto  w-2/3 lg:w-full">
             <Title title="TODOS LOS PRODUCTOS" color="beige" />
           </div>
           <div className="flex justify-center items-center space-x-1 mb-12 mt-12">
