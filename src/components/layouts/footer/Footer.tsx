@@ -54,9 +54,9 @@ function Footer() {
                     </div>
 
                     <div className="m-2 flex flex-col justify-center items-center space-y-2 h-full ">
-                        <a href="#" className="text-sm transition-colors duration-300 dark:text-gray-300 hover:underline">Políticas de privacidad</a>
-                        <a href="#" className="text-sm transition-colors duration-300 dark:text-gray-300 hover:underline">Términos y condiciones</a>
-                        <a href="#" className="text-sm transition-colors duration-300 dark:text-gray-300 hover:underline">Prensa</a>
+                        <a href="/politicasdeprivacidad" className="text-sm transition-colors duration-300 dark:text-gray-300 hover:underline">Políticas de privacidad</a>
+                        <a href="/terminasycondiciones" className="text-sm transition-colors duration-300 dark:text-gray-300 hover:underline">Términos y condiciones</a>
+                        <a href="/prensa" className="text-sm transition-colors duration-300 dark:text-gray-300 hover:underline">Prensa</a>
                     </div>
 
                 </div>

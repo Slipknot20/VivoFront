@@ -149,7 +149,7 @@ export default function UpdateProductForm({ id }: Readonly<{ id: number | undefi
             {/* name */}
             <div className="mb-4">
             <label
-                className="block text-gray-700 text-sm font-bold mb-2"
+                className="block text-labelAdminColor text-md font-bold mb-2"
                 htmlFor="name"
             >
                 Nombre del Vino
@@ -178,7 +178,7 @@ export default function UpdateProductForm({ id }: Readonly<{ id: number | undefi
             {/* image */}
             <div className="mb-4">
             <label
-                className="block text-gray-700 text-sm font-bold mb-2"
+                className="block text-labelAdminColor text-md font-bold mb-2"
                 htmlFor="image"
             >
                 Imagen del producto
@@ -204,7 +204,7 @@ export default function UpdateProductForm({ id }: Readonly<{ id: number | undefi
             {/* wine type */}
             <div className="mb-4">
             <label
-                className="block text-gray-700 text-sm font-bold mb-2"
+                className="block text-labelAdminColor text-md font-bold mb-2"
                 htmlFor="idType"
             >
                 Tipo de Vino
@@ -231,7 +231,7 @@ export default function UpdateProductForm({ id }: Readonly<{ id: number | undefi
             {/* wine winnery */}
             <div className="mb-4">
             <label
-                className="block text-gray-700 text-sm font-bold mb-2"
+                className="block text-labelAdminColor text-md font-bold mb-2"
                 htmlFor="idWinery"
             >
                 Bodega del Vino
@@ -260,7 +260,7 @@ export default function UpdateProductForm({ id }: Readonly<{ id: number | undefi
             {/* grape variety */}
             <div className="mb-4">
             <label
-                className="block text-gray-700 text-sm font-bold mb-2"
+                className="block text-labelAdminColor text-md font-bold mb-2"
                 htmlFor="idVariety"
             >
                 Variedad de uva
@@ -286,7 +286,7 @@ export default function UpdateProductForm({ id }: Readonly<{ id: number | undefi
             {/* stock */}
             <div className="mb-4">
             <label
-                className="block text-gray-700 text-sm font-bold mb-2"
+                className="block text-labelAdminColor text-md font-bold mb-2"
                 htmlFor="stock"
             >
                 Stock
@@ -315,7 +315,7 @@ export default function UpdateProductForm({ id }: Readonly<{ id: number | undefi
             {/* price */}
             <div className="mb-4">
             <label
-                className="block text-gray-700 text-sm font-bold mb-2"
+                className="block text-labelAdminColor text-md font-bold mb-2"
                 htmlFor="price"
             >
                 Precio
@@ -347,7 +347,7 @@ export default function UpdateProductForm({ id }: Readonly<{ id: number | undefi
             {/* year */}
             <div className="mb-4">
             <label
-                className="block text-gray-700 text-sm font-bold mb-2"
+                className="block text-labelAdminColor text-md font-bold mb-2"
                 htmlFor="year"
             >
                 Año
@@ -374,7 +374,7 @@ export default function UpdateProductForm({ id }: Readonly<{ id: number | undefi
             {/* description */}
             <div className="mb-4 col-span-full">
             <label
-                className="block text-gray-700 text-sm font-bold mb-2"
+                className="block text-labelAdminColor text-md font-bold mb-2"
                 htmlFor="description"
             >
                 Descripción
