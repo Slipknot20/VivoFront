@@ -179,7 +179,7 @@ const ProductForm: React.FC<ProductFormProps> = ({  wineries, types, varieties})
                         <DinamicButton
                             bgColor="bg-primary"
                             textColor="text-white"
-                            width="w-1/2"
+                            width="w-2/3"
                             borderRadius="rounded-md"
                             hoverBgColor="hover:bg-white"
                             hoverTextColor="hover:text-primary"
