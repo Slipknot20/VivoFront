@@ -44,11 +44,11 @@ const DialogeMessage: React.FC<DialogProps> = ({
     const getIcon = () => {
         switch (type) {
             case "ÉXITO":
-                return <FaRegCircleCheck className="h-12 w-12 text-green-500 mb-4" />;
+                return <FaRegCircleCheck className="h-12 w-12 text-success mb-4" />;
             case "ERROR":
-                return <MdReportGmailerrorred className="h-12 w-12 text-red-500 mb-4" />;
+                return <MdReportGmailerrorred className="h-12 w-12 text-destructive mb-4" />;
             case "ALERTA":
-                return <MdWarning className="h-12 w-12 text-destructive mb-4" />;
+                return <MdWarning className="h-12 w-12 text-greenMent mb-4" />;
             default:
                 return null;
         }
